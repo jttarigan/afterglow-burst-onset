@@ -1,0 +1,20 @@
+{
+ "schema": "afterglow.campaign/1",
+ "campaign": "m1u_pilot",
+ "experiment": "e1pilotU",
+ "mode": "stepbench",
+ "note": "PRELIMINARY, UNPLUGGED (run with REQ_CHARGING=false before the device setup; D3 needs the charger and >= 90 % for timing runs, so the official run repeats on the charger). docs/04 E1 M1 pilot (the GO/NO-GO gate): T_calm 0.1/1/4 s x L1 50 % x GPU, CPU x L0 probes only x 10 repeats.",
+ "common_args": [
+  "--calms=100,1000,4000",
+  "--loads=50",
+  "--targets=gpu,cpu",
+  "--l0=probes",
+  "--repeats=10",
+  "--thermal-gate-s=600"
+ ],
+ "repeats": 1,
+ "cooldown_s": 60,
+ "seed": 1,
+ "max_requeue": 2,
+ "timeout_s": 1800
+}

@@ -1,0 +1,17 @@
+build/
+results/
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+xcuserdata/
+*.xcuserstate
+DerivedData/
+.gradle/
+local.properties
+platform/android/app/build/
+compile_commands.json
+.cache/
+platform/android/build/
+platform/android/.kotlin/
+

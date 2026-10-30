@@ -1,0 +1,116 @@
+#!/usr/bin/env python3
+"""Method-section tables, from run provenance and campaign state (no fitting, light).
+
+  1. E0 self-checks per device (determinism, probe linearity and stability, forecaster cost);
+  2. devices and OS builds, from one valid E1 run per device;
+  3. run validity per device and M2 campaign (valid, invalid attempts with reasons, still open).
+
+Usage: paper_tables.py [--results results] [--out results/paper_tables/tables.md]
+"""
+import argparse
+import collections
+import json
+from pathlib import Path
+
+DEVICES = ["ippro3", "ip12", "ipmini6", "poco", "tab", "s6lite", "a56"]
+CAMPAIGNS = ["m2_e1", "m2_unplugged", "m2_ablation", "m2_idlegap", "m2_120hz", "m2_120hz_full"]
+# The E0 run each device's paper numbers come from (project log); "U" = unplugged.
+E0_RUN = {
+    "ip12": "ip12_e0_all_0_20261008T040943Z",
+    "poco": "poco_e0_all_0_20261007T135633Z",
+    "tab": "tab_e0U_all_0_20261007T162027Z",
+    "s6lite": "s6lite_e0_all_0_20261014T142509Z",
+    "ipmini6": "ipmini6_e0_all_0_20261016T082940Z",
+    "a56": "a56_e0_all_0_20261024T103634Z",
+}
+# Devices without a valid E0 run, with the reason the paper gives (D75).
+E0_MISSING = {"ippro3": "no valid run: 6 of 6 failed the fast-frame rule (late-frame catch-ups on the 120 Hz grid, D75)"}
+
+
+def load(path):
+    with open(path) as f:
+        return json.load(f)
+
+
+def e0_table(res):
+    out = ["| Device | E0 run | Build | Power, battery | Levels matching | GPU probe warm µs (R², robust CV) "
+           "| CPU probe warm µs (R², robust CV) | Probe sizes | Forecast h=24 median / p95 µs |",
+           "|---|---|---|---|---|---|---|---|---|"]
+    for dev in DEVICES:
+        rid = E0_RUN.get(dev)
+        if not rid:
+            out.append(f"| {dev} | {E0_MISSING.get(dev, 'none yet')} | | | | | | | |")
+            continue
+        r = load(res / rid / "run.json")
+        e, s, p = r["e0"], r["state_start"], r["probes"]
+        g, c = e["gpu_probe"], e["cpu_probe"]
+        h24 = next(f for f in e["forecast"] if f["horizon_ticks"] == 24)
+        sizes = f"GPU {p['gpu_probe_iters']}×{p['gpu_probe_groups']}×64, CPU {p['cpu_probe_iters']}"
+        out.append(
+            f"| {dev} | `{rid}` | {r['build']['git_commit'][:7]} | {s['power_source']}, {s['battery_percent']} % "
+            f"| {e['levels']['matching']}/{e['levels']['levels']} "
+            f"| {g['warm_median_ns'] / 1000:.1f} ({g['r2_medians']:.4f}, {100 * g['warm_cv_robust']:.1f} %) "
+            f"| {c['warm_median_ns'] / 1000:.1f} ({c['r2_medians']:.4f}, {100 * c['warm_cv_robust']:.1f} %) "
+            f"| {sizes} | {h24['median_us']:.0f} / {h24['p95_us']:.0f} |")
+    return out
+
+
+def device_table(res):
+    out = ["| ID | Model | SoC | GPU | OS (build) | Pinned build | Source run |", "|---|---|---|---|---|---|---|"]
+    for dev in DEVICES:
+        st = res / "campaigns" / f"m2_e1_{dev}.json"
+        rid = None
+        if st.exists():
+            rid = next((a["run_id"] for run in load(st)["runs"] for a in run.get("attempts", [])
+                        if a.get("valid") and (res / a["run_id"] / "run.json").exists()), None)
+        if not rid:
+            out.append(f"| {dev} | | | | | | no valid E1 run yet |")
+            continue
+        r = load(res / rid / "run.json")
+        d = r["device"]
+        build = d.get("os_build") or d.get("build_fingerprint") or ""
+        out.append(f"| {dev} | {d.get('model', '')} | {d.get('soc', '')} | {d.get('gpu_name', r['gfx'].get('device', ''))} "
+                   f"| {d.get('os', '')} ({build}) | {r['build']['git_commit'][:7]} | `{rid}` |")
+    return out
+
+
+def reason_kind(reason):
+    if reason.startswith("run.json unreadable") or reason == "no run.json":
+        return "launch failed, no run written"
+    return reason.split(":")[0].split("(")[0].strip()
+
+
+def validity_table(res):
+    out = ["| Device | Campaign | Planned runs | Valid | Invalid attempts | Open | Invalid reasons |",
+           "|---|---|---|---|---|---|---|"]
+    for dev in DEVICES:
+        for camp in CAMPAIGNS:
+            st = res / "campaigns" / f"{camp}_{dev}.json"
+            if not st.exists():
+                continue
+            runs = load(st)["runs"]
+            valid = sum(r.get("final") == "valid" for r in runs)
+            bad = [a for r in runs for a in r.get("attempts", []) if not a.get("valid")]
+            reasons = collections.Counter(reason_kind(x) for a in bad for x in (a.get("reasons") or ["no run.json"]))
+            open_ = sum(r.get("final") not in ("valid", "failed") for r in runs)
+            why = "; ".join(f"{k} ×{n}" for k, n in reasons.most_common())
+            out.append(f"| {dev} | {camp} | {len(runs)} | {valid} | {len(bad)} | {open_} | {why} |")
+    return out
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--results", default="results")
+    ap.add_argument("--out", default="results/paper_tables/tables.md")
+    a = ap.parse_args()
+    res = Path(a.results)
+    text = ["# Method tables (generated by tools/analysis/paper_tables.py)", "",
+            "## E0 self-checks", ""] + e0_table(res) + ["", "## Devices", ""] + device_table(res) + \
+           ["", "## Run validity (M2 campaigns)", ""] + validity_table(res) + [""]
+    Path(a.out).parent.mkdir(parents=True, exist_ok=True)
+    Path(a.out).write_text("\n".join(text))
+    print("\n".join(text))
+
+
+if __name__ == "__main__":
+    main()

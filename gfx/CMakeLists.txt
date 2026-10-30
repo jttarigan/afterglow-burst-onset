@@ -1,0 +1,17 @@
+# gfx/: thin compute + present layer (docs/03 §1). Metal on Apple, Vulkan 1.1 elsewhere
+# (and on a Mac via MoltenVK for development only: preset mac-vulkan).
+if(AG_GFX_BACKEND STREQUAL "metal")
+  add_library(ag_gfx STATIC metal/MetalGfx.cpp)
+  target_link_libraries(ag_gfx PUBLIC ag_core ag_metalcpp)
+  target_compile_definitions(ag_gfx PUBLIC AG_GFX_METAL=1)
+else()
+  add_library(ag_gfx STATIC vulkan/VulkanGfx.cpp)
+  target_link_libraries(ag_gfx PUBLIC ag_core PRIVATE ag_vulkan_headers)
+  target_compile_definitions(ag_gfx PUBLIC AG_GFX_VULKAN=1)
+  if(ANDROID)
+    target_link_libraries(ag_gfx PUBLIC android dl)
+  endif()
+endif()
+target_include_directories(ag_gfx PUBLIC include PRIVATE "${AG_GEN_DIR}")
+add_dependencies(ag_gfx ag_kernels)
+ag_set_warnings(ag_gfx)

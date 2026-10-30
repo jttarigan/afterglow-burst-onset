@@ -1,0 +1,4 @@
+{"schema": "afterglow.campaign/1", "campaign": "m1_e0", "experiment": "e0", "mode": "e0",
+ "note": "docs/04 E0 self-checks: level determinism, forecaster cost, probe linearity and warm CV, probe result.",
+ "common_args": ["--thermal-gate-s=600", "--e0-frames=1500"], "repeats": 1, "cooldown_s": 60, "seed": 1,
+ "max_requeue": 1, "timeout_s": 900}

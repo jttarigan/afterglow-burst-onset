@@ -1,0 +1,16 @@
+{
+ "schema": "afterglow.campaign/1",
+ "campaign": "m1u_e0",
+ "experiment": "e0U",
+ "mode": "e0",
+ "note": "PRELIMINARY, UNPLUGGED (run with REQ_CHARGING=false before the device setup; D3 needs the charger and >= 90 % for timing runs, so the official run repeats on the charger). docs/04 E0 self-checks: level determinism, forecaster cost, probe linearity and warm CV, probe result.",
+ "common_args": [
+  "--thermal-gate-s=600",
+  "--e0-frames=1500"
+ ],
+ "repeats": 1,
+ "cooldown_s": 60,
+ "seed": 1,
+ "max_requeue": 1,
+ "timeout_s": 900
+}

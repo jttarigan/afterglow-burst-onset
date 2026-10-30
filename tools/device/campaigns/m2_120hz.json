@@ -1,0 +1,6 @@
+{"schema": "afterglow.campaign/1", "campaign": "m2_120hz", "experiment": "e1h", "mode": "stepbench",
+ "note": "docs/04 E1 120 Hz subset (D53): T_calm 0.25/1/4 s x L1 50 % of the 8.3 ms budget (the same work as the 60 Hz L1 = 25 % cells) x gpu,cpu,both x L0 probes only x 10 repeats, in the display's 120 Hz mode. On the charger; the Tab/A56 must be on Tinggi/Adaptive (run_android.sh checks it when REFRESH_HZ=120). Devices: poco, tab, ippro3 (a56 optional).",
+ "env": {"REFRESH_HZ": "120"},
+ "common_args": ["--calms=250,1000,4000", "--loads=50", "--targets=gpu,cpu,both", "--l0=probes", "--repeats=10",
+                 "--thermal-gate-s=600"],
+ "repeats": 1, "cooldown_s": 60, "seed": 1, "max_requeue": 2, "timeout_s": 1800}

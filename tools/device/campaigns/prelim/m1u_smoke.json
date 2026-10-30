@@ -1,0 +1,15 @@
+{
+ "schema": "afterglow.campaign/1",
+ "campaign": "m1u_smoke",
+ "experiment": "smokeU",
+ "mode": "smoke",
+ "note": "PRELIMINARY, UNPLUGGED (run with REQ_CHARGING=false before the device setup; D3 needs the charger and >= 90 % for timing runs, so the official run repeats on the charger). docs/03 \u00a713 device smoke test: a 30 s stepbench whose schema is validated.",
+ "common_args": [
+  "--thermal-gate-s=600"
+ ],
+ "repeats": 1,
+ "cooldown_s": 60,
+ "seed": 1,
+ "max_requeue": 0,
+ "timeout_s": 900
+}

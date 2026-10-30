@@ -1,0 +1,25 @@
+{
+ "schema": "afterglow.levelgen/1",
+ "note": "Research level set (docs/02 §3, docs/04 E2). Bands chosen from 'aglab --mode=levelgen --explore' (D23). T_calm is measured from the end of the previous burst, or from level start, to the first detonation (D22).",
+ "seed_base": 20261006,
+ "hold_ticks": 7,
+ "max_attempts": 400,
+ "position_step": 30,
+ "max_cascades_per_burst": 96,
+ "margin_ticks": 600,
+ "classes": {
+  "small":  {"band": [10, 20],   "orbs": [90, 150]},
+  "medium": {"band": [40, 60],   "orbs": [170, 240]},
+  "large":  {"band": [120, 170], "orbs": [320, 400]}
+ },
+ "single": {
+  "calm_ms": [250, 500, 1000, 2000, 4000, 8000],
+  "classes": ["small", "medium", "large"]
+ },
+ "repeated": [
+  {"id": "repeat_2x_0500ms",  "class": "small", "orbs": [110, 160], "calm_ms": [1000, 500]},
+  {"id": "repeat_2x_2000ms",  "class": "small", "orbs": [110, 160], "calm_ms": [1000, 2000]},
+  {"id": "repeat_3x_0250_1000ms", "class": "small", "orbs": [110, 160], "calm_ms": [1000, 250, 1000]},
+  {"id": "repeat_3x_4000_8000ms", "class": "small", "orbs": [110, 160], "calm_ms": [1000, 4000, 8000]}
+ ]
+}

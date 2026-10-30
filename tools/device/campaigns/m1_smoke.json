@@ -1,0 +1,4 @@
+{"schema": "afterglow.campaign/1", "campaign": "m1_smoke", "experiment": "smoke", "mode": "smoke",
+ "note": "docs/03 §13 device smoke test: a 30 s stepbench whose schema is validated.",
+ "common_args": ["--thermal-gate-s=600"], "repeats": 1, "cooldown_s": 60, "seed": 1, "max_requeue": 0,
+ "timeout_s": 900}

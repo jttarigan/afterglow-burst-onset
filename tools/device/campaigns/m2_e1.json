@@ -1,0 +1,5 @@
+{"schema": "afterglow.campaign/1", "campaign": "m2_e1", "experiment": "e1", "mode": "stepbench",
+ "note": "docs/04 E1 full step response: 8 calms x 3 loads x 3 targets x 2 L0 x 15 repeats = 2160 trials, split into runs of 150 trials (~10 min).",
+ "common_args": ["--calms=50,100,250,500,1000,2000,4000,8000", "--loads=25,50,80", "--targets=gpu,cpu,both",
+                 "--l0=probes,ambient", "--repeats=15", "--thermal-gate-s=600"],
+ "split": {"trials_per_run": 150}, "cooldown_s": 60, "seed": 1, "max_requeue": 2, "timeout_s": 1800}

@@ -1,0 +1,5 @@
+{"schema": "afterglow.campaign/1", "campaign": "m2_unplugged", "experiment": "e1U", "mode": "stepbench",
+ "note": "docs/04 E1 unplugged subset. RUN WITH REQ_CHARGING=false and the charger out: T_calm 0.25/1/4 s x L1 50 % x both x L0 probes only x 10 repeats.",
+ "common_args": ["--calms=250,1000,4000", "--loads=50", "--targets=both", "--l0=probes", "--repeats=10",
+                 "--thermal-gate-s=600"],
+ "repeats": 1, "cooldown_s": 60, "seed": 1, "max_requeue": 2, "timeout_s": 1800}

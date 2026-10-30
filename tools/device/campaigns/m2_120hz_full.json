@@ -1,0 +1,6 @@
+{"schema": "afterglow.campaign/1", "campaign": "m2_120hz_full", "experiment": "e1hf", "mode": "stepbench",
+ "note": "D65, exploratory (not in the frozen protocol): the full m2_e1 grid in the display's 120 Hz mode, to test whether the POCO GPU's 120 Hz onset penalty (m2_120hz) holds across calms and loads. Loads are % of the 8.3 ms budget. 8 calms x 3 loads x 3 targets x 2 L0 x 15 repeats = 2160 trials, runs of 150. On the charger; POCO peak_refresh_rate 120. Pinned build 654c22c (D60).",
+ "env": {"REFRESH_HZ": "120"},
+ "common_args": ["--calms=50,100,250,500,1000,2000,4000,8000", "--loads=25,50,80", "--targets=gpu,cpu,both",
+                 "--l0=probes,ambient", "--repeats=15", "--thermal-gate-s=600"],
+ "split": {"trials_per_run": 150}, "cooldown_s": 60, "seed": 1, "max_requeue": 2, "timeout_s": 1800}

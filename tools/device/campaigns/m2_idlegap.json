@@ -1,0 +1,4 @@
+{"schema": "afterglow.campaign/1", "campaign": "m2_idlegap", "experiment": "idlegap", "mode": "idlegap",
+ "note": "docs/04 E1 GPU idle-gap ladder (S6): gaps 0.1 ms - 2 s x 20 repeats, shuffled; separates idle-exit latency from DVFS ramp.",
+ "common_args": ["--gaps=0.1,0.3,1,3,10,30,100,300,1000,2000", "--gap-reps=20", "--thermal-gate-s=600"],
+ "repeats": 1, "cooldown_s": 60, "seed": 1, "max_requeue": 2, "timeout_s": 900}

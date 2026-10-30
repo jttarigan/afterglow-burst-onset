@@ -1,0 +1,20 @@
+{
+ "schema": "afterglow.campaign/1",
+ "campaign": "m1u_pilot_gpu_long",
+ "experiment": "e1pilotGlongU",
+ "note": "PRELIMINARY, UNPLUGGED, EXPLORATORY: the iPhone 12 pilot showed no GPU onset penalty at T_calm <= 4 s; does one appear after longer calms? GPU only, 50 %, probes-only L0, 10 repeats.",
+ "common_args": [
+  "--calms=8000,16000",
+  "--loads=50",
+  "--targets=gpu",
+  "--l0=probes",
+  "--repeats=10",
+  "--thermal-gate-s=600"
+ ],
+ "repeats": 1,
+ "cooldown_s": 60,
+ "seed": 1,
+ "max_requeue": 1,
+ "timeout_s": 1800,
+ "mode": "stepbench"
+}

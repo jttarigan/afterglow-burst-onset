@@ -1,0 +1,22 @@
+{
+ "schema": "afterglow.campaign/1",
+ "campaign": "m1u_pilot_gpu_long_wide",
+ "experiment": "e1pilotGwideU",
+ "mode": "stepbench",
+ "note": "PRELIMINARY, UNPLUGGED, EXPLORATORY: does a wide GPU probe (64 x 64 threads, 300 iterations, probe_wide.csv) see the A14 GPU onset state that the standard 4 x 64 probe misses? GPU only, T_calm 1, 8, 16 s, 50 %, 10 repeats.",
+ "common_args": [
+  "--calms=1000,8000,16000",
+  "--loads=50",
+  "--targets=gpu",
+  "--l0=probes",
+  "--repeats=10",
+  "--thermal-gate-s=600",
+  "--probe-wide-groups=64",
+  "--probe-wide-iters=300"
+ ],
+ "repeats": 1,
+ "cooldown_s": 60,
+ "seed": 1,
+ "max_requeue": 1,
+ "timeout_s": 1800
+}

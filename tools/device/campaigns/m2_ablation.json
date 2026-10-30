@@ -1,0 +1,6 @@
+{"schema": "afterglow.campaign/1", "campaign": "m2_ablation", "experiment": "e1abl", "mode": "stepbench",
+ "note": "docs/04 E1 probe-size ablation: GPU probe x1 vs x4 at T_calm 0.25/4 s, L1 50 % GPU, L0 probes only, 10 repeats. One run per probe size.",
+ "common_args": ["--calms=250,4000", "--loads=50", "--targets=gpu", "--l0=probes", "--repeats=10",
+                 "--thermal-gate-s=600"],
+ "cells": [{"cell": "px1", "args": ["--probe-mult=1"]}, {"cell": "px4", "args": ["--probe-mult=4"]}],
+ "repeats": 1, "cooldown_s": 60, "seed": 1, "max_requeue": 2, "timeout_s": 1800}
