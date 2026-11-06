@@ -4,10 +4,11 @@ Source code for measuring the **burst-onset penalty** on stock mobile devices: h
 frames of a sudden burst of CPU or GPU work run after a calm period, while the operating system's power
 management (DVFS governors, idle states) brings the clocks back up, and how long the clocks stay up afterwards.
 
-The workload comes from **Afterglow**, a native chain-reaction puzzle game written for this purpose. Its gameplay
-simulation is integer-only, so the amount of work per frame is identical on every device. The measurements
-themselves use a step benchmark (`stepbench`): a fixed calm period followed by a fixed load, repeated over a
-grid of calm lengths, load sizes and targets (CPU, GPU or both), with always-on clock probes on both processors.
+The measuring app is **Afterglow**, a native chain-reaction game built as a research instrument. Its integer-only
+simulation core is included here, so the amount of work per frame is identical on every device; the game's play
+mode and renderer are not part of this release. No measurement comes from gameplay: the measurements use a step
+benchmark (`stepbench`): a fixed calm period followed by a fixed load, repeated over a grid of calm lengths, load
+sizes and targets (CPU, GPU or both), with always-on clock probes on both processors.
 
 No root and no private APIs are used. Everything runs on stock commercial phones and tablets.
 
